@@ -184,11 +184,13 @@
 
         /* "Scroll Down" Animated Indicator */
         #scroll-prompt {
-            position: absolute;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 20;
+            /* REMOVED position: absolute; */
+            /* REMOVED bottom: 2rem; */
+            /* REMOVED left: 50%; */
+            /* REMOVED transform: translateX(-50%); */
+            /* REMOVED z-index: 20; */
+            
+            position: relative; /* Now part of the content flow */
             color: white;
             font-size: 0.75rem;
             text-transform: uppercase;
@@ -229,7 +231,7 @@
             <div class="flex justify-between items-center h-20">
                 <!-- Logo / Conference Title -->
                 <div class="flex-shrink-0">
-                    <a href="#" class="text-2xl font-bold text-white transition-colors hover:text-indigo-400">
+                    <a href="#" class="nav-link text-2xl font-bold text-white transition-colors hover:text-indigo-400">
                         CSMAI <span class="text-indigo-400">2026</span>
                     </a>
                 </div>
@@ -242,7 +244,7 @@
                     <a href="#registration" class="nav-link text-gray-300 hover:text-white transition-colors px-3 py-2 rounded-md text-sm font-medium">REGISTRATION</a>
                     <a href="#dates" class="nav-link text-gray-300 hover:text-white transition-colors px-3 py-2 rounded-md text-sm font-medium">DATES</a>
                     <a href="#publication" class="nav-link text-gray-300 hover:text-white transition-colors px-3 py-2 rounded-md text-sm font-medium">PUBLICATION</a>
-                    <a href="#contact" class.="nav-link text-gray-300 hover:text-white transition-colors px-3 py-2 rounded-md text-sm font-medium">CONTACT</a>
+                    <a href="#contact" class="nav-link text-gray-300 hover:text-white transition-colors px-3 py-2 rounded-md text-sm font-medium">CONTACT</a>
                 </div>
 
                 <!-- Mobile Menu Button -->
@@ -271,7 +273,7 @@
                 <a href="#registration" class="nav-link block px-3 py-3 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800">REGISTRATION</a>
                 <a href="#dates" class="nav-link block px-3 py-3 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800">DATES</a>
                 <a href="#publication" class="nav-link block px-3 py-3 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800">PUBLICATION</a>
-                <a href="#contact" class.="nav-link block px-3 py-3 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800">CONTACT</a>
+                <a href="#contact" class="nav-link block px-3 py-3 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800">CONTACT</a>
             </div>
         </div>
     </header>
@@ -280,8 +282,8 @@
     <main>
         <!-- Hero Section -->
         <!-- This section is now a "scaffolding" for the 3D scene -->
-        <section id="home" class="relative h-screen flex items-center justify-center text-center overflow-hidden">
-            <div class="relative z-10 p-4 max-w-4xl mx-auto">
+        <section id="home" class="relative min-h-screen flex items-center justify-center text-center overflow-hidden pt-20"> <!-- CHANGED: h-screen to min-h-screen, ADDED pt-20 -->
+            <div class="relative z-10 p-4 max-w-4xl mx-auto"> <!-- REMOVED: pt-24 -->
                 <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-tight">
                     International Conference on
                     <span class="block section-title">Complex System Modelling and Artificial Intelligence</span>
@@ -299,69 +301,48 @@
                         Register Now
                     </a>
                 </div>
-            </div>
 
-            <!-- New Scroll Down Prompt -->
-            <div id="scroll-prompt">
-                Scroll to discover
-                <span>
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </span>
-            </div>
+                <!-- New Scroll Down Prompt Location -->
+                <div id="scroll-prompt" class="mt-12 sm:mt-16"> <!-- Added margin-top -->
+                    Scroll to discover
+                    <span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </span>
+                </div>
+                
+            </div> <!-- Closing div for relative z-10 -->
         </section>
         
-        <!-- The rest of the content will appear over the 3D scene -->
-        <div id="content-wrapper" class="relative z-10">
+        <!-- The content that appears on scroll -->
+        <div id="content-container" class="relative z-10" style="background: linear-gradient(to bottom, transparent 0%, #05050c 100px); margin-top: -100px; padding-top: 100px;">
+        
             <!-- About Section -->
             <section id="about" class="py-24 sm:py-32 fade-in-section">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-                    <div class="premium-card p-8 md:p-12">
-                        <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl section-title inline-block">About the Conference</h2>
-                        <p class="mt-6 text-lg leading-7 text-gray-300">
-                            The International Conference on Complex System Modelling and Artificial Intelligence (CSMAI 2026) aims to bring together researchers, academicians, and industry professionals to discuss the latest advancements, trends, and challenges in the fields of complex systems and artificial intelligence.
-                        </p>
-                        <p class="mt-4 text-lg leading-7 text-gray-300">
-                            This conference serves as a global platform for the exchange of innovative ideas, emerging methodologies, and transformative research that bridge theoretical foundations with real-world applications. Participants will explore cutting-edge developments in AI-driven system modeling, computational intelligence, data analytics, cyber-physical systems, and intelligent automation.
-                        </p>
-                    </div>
-                    <div class="premium-card p-8 md:p-12"> <!-- Removed float animation, as the background is now the focus -->
-                        <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">About UAMD</h2>
-                        <p class="mt-6 text-lg leading-7 text-gray-300">
-                            Universiteti “Aleksandër Moisiu” Durrës (UAMD) is one of Albania’s leading public universities, known for its commitment to academic excellence, innovation, and international collaboration.
-                        </p>
-                        <p class="mt-4 text-lg leading-7 text-gray-300">
-                            Situated in the coastal city of Durrës — a vibrant hub of culture, technology, and commerce — UAMD provides an inspiring environment for learning, research, and innovation, aligning with its mission to contribute to regional and global development through education and knowledge.
-                        </p>
-                    </div>
-                </div>
-            </section>
-            
-            <!-- AI Track Suggester Section -->
-            <section id="ai-suggester" class="py-24 sm:py-32 bg-gray-900 bg-opacity-30 fade-in-section">
-                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="text-center">
-                        <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl section-title inline-block">AI Track Suggester</h2>
-                        <p class="mt-4 text-lg leading-8 text-gray-300">
-                            Not sure where your paper fits? Paste your abstract below and let our Gemini AI model suggest the best-fitting conference track.
-                        </p>
+                        <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl section-title inline-block">About the Conference</h2>
                     </div>
-                    
-                    <div class="mt-12 premium-card p-8 md:p-12">
-                        <div class="space-y-4">
-                            <label for="abstract-input" class="block text-sm font-medium text-gray-300">Paste your abstract here (min. 50 words):</label>
-                            <textarea id="abstract-input" name="abstract" rows="8" class="block w-full rounded-lg border-gray-600 bg-gray-800 text-white p-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Enter your full abstract..."></textarea>
-                            
-                            <button id="suggest-track-btn" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-full shadow-lg text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all disabled:opacity-50">
-                                Suggest Track
-                            </button>
-
-                            <div id="ai-loader" class="loader"></div>
-                            
-                            <div id="ai-result">
-                                <h3 class="text-lg font-semibold text-white">Recommended Track:</h3>
-                                <p id="ai-result-text" class="mt-2 text-gray-300 whitespace-pre-wrap"></p>
-                            </div>
-                            <div id="ai-error" class="text-red-400 text-center" style="display: none;"></div>
+                    <div class="mt-16 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                        <!-- Left Column: About Conference -->
+                        <div class="premium-card p-8 md:p-12">
+                            <h3 class="text-2xl font-semibold text-indigo-300">Welcome to CSMAI 2026</h3>
+                            <p class="mt-4 text-lg text-gray-300">
+                                The International Conference on Complex System Modelling and Artificial Intelligence (CSMAI 2026) aims to bring together researchers, academicians, and industry professionals to discuss the latest advancements, trends, and challenges in the fields of complex systems and artificial intelligence.
+                            </p>
+                            <p class="mt-4 text-lg text-gray-300">
+                                This conference serves as a global platform for the exchange of innovative ideas, emerging methodologies, and transformative research that bridge theoretical foundations with real-world applications.
+                            </p>
+                        </div>
+                        
+                        <!-- Right Column: About UAMD -->
+                        <div class="premium-card p-8 md:p-12 lg:mt-0" style="animation: float 6s ease-in-out infinite;">
+                            <h3 class="text-2xl font-semibold text-purple-300">About the Venue: UAMD</h3>
+                            <p class="mt-4 text-lg text-gray-300">
+                                Universiteti “Aleksandër Moisiu” Durrës (UAMD) is one of Albania’s leading public universities, known for its commitment to academic excellence, innovation, and international collaboration.
+                            </p>
+                            <p class="mt-4 text-lg text-gray-300">
+                                Situated in the coastal city of Durrës — a vibrant hub of culture, technology, and commerce — UAMD provides an inspiring environment for learning, research, and innovation.
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -475,6 +456,45 @@
                         <a href="#" class="mt-8 hero-btn hero-btn-primary inline-block bg-indigo-600 text-white font-semibold px-8 py-3 rounded-full text-lg shadow-lg hover:bg-indigo-500 transition-all">
                             Submission Portal (Coming Soon)
                         </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AI Track Suggester Section (FIXED) -->
+            <section id="ai-suggester" class="py-24 sm:py-32 fade-in-section">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center max-w-3xl mx-auto">
+                        <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl section-title inline-block">AI Track Suggester</h2>
+                        <p class="mt-4 text-lg leading-8 text-gray-300">
+                            Have a research abstract? Paste it below and let our AI suggest the most relevant conference track for your submission.
+                        </p>
+                    </div>
+
+                    <div class="mt-16 max-w-3xl mx-auto premium-card p-8 md:p-12">
+                        <div class="space-y-6">
+                            <div>
+                                <label for="abstract-input" class="block text-sm font-medium text-gray-300">Your Research Abstract</label>
+                                <textarea id="abstract-input" name="abstract" rows="8" required class="mt-2 block w-full rounded-lg border-gray-600 bg-gray-800 text-white p-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Enter your abstract here (at least 50 words)..."></textarea>
+                            </div>
+                            <div class="text-center">
+                                <button id="suggest-track-btn" class="hero-btn hero-btn-primary inline-block bg-indigo-600 text-white font-semibold px-8 py-3 rounded-full text-lg shadow-lg hover:bg-indigo-500 transition-all disabled:opacity-50"
+                                >
+                                    Get AI Recommendation
+                                </button>
+                            </div>
+                            
+                            <!-- Loader -->
+                            <div id="ai-loader" class="loader mx-auto" style="display: none;"></div>
+                            
+                            <!-- Error Message -->
+                            <div id="ai-error" class="text-red-400 text-center" style="display: none;"></div>
+
+                            <!-- Result Box -->
+                            <div id="ai-result" style="display: none;">
+                                <!-- Use <pre> to preserve line breaks from the AI response -->
+                                <pre id="ai-result-text" class="text-lg text-white whitespace-pre-wrap font-sans"></pre>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -872,8 +892,15 @@
                 e.preventDefault();
                 const targetId = this.getAttribute('href');
                 
-                if (targetId === '#') {
+                if (targetId === '#' || targetId === '#home') {
                     window.scrollTo({ top: 0, behavior: 'smooth' });
+                    
+                    // Close mobile menu if open
+                    if (mobileMenu.classList.contains('open')) {
+                        mobileMenu.classList.remove('open');
+                        menuIconOpen.classList.remove('hidden');
+                        menuIconClose.classList.add('hidden');
+                    }
                     return;
                 }
 
@@ -882,16 +909,7 @@
                 if (targetElement) {
                     // Calculate offset for fixed header
                     const headerOffset = document.getElementById('header').offsetHeight;
-                    let elementPosition;
-                    
-                    // The #home section should scroll to the very top
-                    if (targetId === '#home' || targetId === '#about') {
-                         elementPosition = targetElement.getBoundingClientRect().top;
-                    } else {
-                         // Other sections need to account for the content wrapper's offset
-                         elementPosition = targetElement.getBoundingClientRect().top;
-                    }
-                    
+                    const elementPosition = targetElement.getBoundingClientRect().top;
                     const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
                     window.scrollTo({
@@ -914,27 +932,31 @@
             
 
             // --- Mobile Menu Toggle ---
-            mobileMenuBtn.addEventListener('click', () => {
-                const isOpen = mobileMenu.classList.toggle('open');
-                menuIconOpen.classList.toggle('hidden', isOpen);
-                menuIconClose.classList.toggle('hidden', !isOpen);
-            });
+            if (mobileMenuBtn) { // Add null check for safety
+                mobileMenuBtn.addEventListener('click', () => {
+                    const isOpen = mobileMenu.classList.toggle('open');
+                    menuIconOpen.classList.toggle('hidden', isOpen);
+                    menuIconClose.classList.toggle('hidden', !isOpen);
+                });
+            }
 
 
             // --- Back to Top Button ---
             const toTopBtn = document.getElementById('to-top-btn');
             
-            window.addEventListener('scroll', () => {
-                if (window.pageYOffset > 300) {
-                    toTopBtn.classList.add('visible');
-                } else {
-                    toTopBtn.classList.remove('visible');
-                }
-            });
+            if(toTopBtn) { // Add null check for safety
+                window.addEventListener('scroll', () => {
+                    if (window.pageYOffset > 300) {
+                        toTopBtn.classList.add('visible');
+                    } else {
+                        toTopBtn.classList.remove('visible');
+                    }
+                });
 
-            toTopBtn.addEventListener('click', () => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
+                toTopBtn.addEventListener('click', () => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
 
 
             // --- Fade-in on Scroll Animation ---
@@ -964,36 +986,38 @@
             const aiResultText = document.getElementById('ai-result-text');
             const aiError = document.getElementById('ai-error');
 
-            suggestBtn.addEventListener('click', async () => {
-                const abstract = abstractInput.value;
+            if (suggestBtn) { // Add null check, this is where the error happened
+                suggestBtn.addEventListener('click', async () => {
+                    const abstract = abstractInput.value;
 
-                if (abstract.length < 50) {
-                    aiError.textContent = 'Please enter an abstract of at least 50 words.';
-                    aiError.style.display = 'block';
+                    if (abstract.length < 50) {
+                        aiError.textContent = 'Please enter an abstract of at least 50 words.';
+                        aiError.style.display = 'block';
+                        aiResultBox.style.display = 'none';
+                        return;
+                    }
+
+                    // Reset UI
+                    aiError.style.display = 'none';
                     aiResultBox.style.display = 'none';
-                    return;
-                }
+                    aiLoader.style.display = 'block';
+                    suggestBtn.disabled = true;
 
-                // Reset UI
-                aiError.style.display = 'none';
-                aiResultBox.style.display = 'none';
-                aiLoader.style.display = 'block';
-                suggestBtn.disabled = true;
-
-                try {
-                    const recommendation = await callGeminiApi(abstract);
-                    aiResultText.innerText = recommendation; // Using innerText to prevent HTML injection
-                    aiResultBox.style.display = 'block';
-                } catch (error) {
-                    console.error('Gemini API call failed:', error);
-                    aiError.textContent = 'Error: Could not get suggestion. Please try again later.';
-                    aiError.style.display = 'block';
-                } finally {
-                    // Re-enable UI
-                    aiLoader.style.display = 'none';
-                    suggestBtn.disabled = false;
-                }
-            });
+                    try {
+                        const recommendation = await callGeminiApi(abstract);
+                        aiResultText.innerText = recommendation; // Using innerText to prevent HTML injection
+                        aiResultBox.style.display = 'block';
+                    } catch (error) {
+                        console.error('Gemini API call failed:', error);
+                        aiError.textContent = 'Error: Could not get suggestion. Please try again later.';
+                        aiError.style.display = 'block';
+                    } finally {
+                        // Re-enable UI
+                        aiLoader.style.display = 'none';
+                        suggestBtn.disabled = false;
+                    }
+                });
+            } // End of null check for suggestBtn
 
             async function callGeminiApi(abstract) {
                 const apiKey = ""; // API key will be injected
