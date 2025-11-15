@@ -80,6 +80,53 @@
             border-color: rgba(79, 70, 229, 0.5); /* Indigo accent on hover */
         }
         
+        /* --- NEW: Image Card Background Style --- */
+        .image-card-bg {
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .image-card-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(15, 15, 28, 0.95), rgba(15, 15, 28, 0.6));
+            z-index: -1;
+            transition: all 0.3s ease;
+        }
+        .premium-card.image-card-bg:hover::before {
+            background: linear-gradient(to top, rgba(15, 15, 28, 0.8), rgba(15, 15, 28, 0.4));
+        }
+
+        /* --- NEW: Visual Call for Papers Card --- */
+        .topic-card {
+            position: relative;
+            overflow: hidden;
+            padding: 0; /* Remove padding to let image fill */
+        }
+        .topic-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: all 0.4s ease;
+        }
+        .topic-card:hover img {
+            transform: scale(1.05);
+        }
+        .topic-card-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem;
+            background: linear-gradient(to top, rgba(15, 15, 28, 1), rgba(15, 15, 28, 0.7), transparent);
+        }
+
         /* Date Timeline Style */
         .timeline-item {
             position: relative;
@@ -102,16 +149,56 @@
             border: 2px solid #e0e0e0;
         }
         
+        /* --- Dropdown Menu Styles --- */
+        .dropdown {
+            position: relative;
+        }
+        .dropdown-menu {
+            display: none; /* Hidden by default */
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding-top: 0.75rem; /* 12px space */
+            z-index: 50;
+            min-width: 12rem; /* 192px */
+        }
+        .dropdown-content {
+            background-color: rgba(15, 15, 28, 0.9); /* Dark, blurred */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.75rem; /* 12px */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        .dropdown:hover .dropdown-menu {
+            display: block; /* Show on desktop hover */
+        }
+        /* Mobile dropdown toggle */
+        .dropdown-toggle-mobile.open + .dropdown-menu-mobile {
+            max-height: 500px; /* Show mobile dropdown content */
+        }
+        
         /* Mobile Menu */
         .mobile-menu {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease-out;
+            background-color: #0c0c1e; /* Solid dark background */
         }
         .mobile-menu.open {
             max-height: 100vh; /* Large value to allow it to expand */
             overflow-y: auto;
             transition: max-height 0.5s ease-in;
+        }
+        .dropdown-menu-mobile {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: rgba(10, 10, 20, 0.5);
+            border-radius: 0.5rem;
+            margin-top: 0.25rem;
         }
         
         /* Back to Top Button */
@@ -152,45 +239,23 @@
             transform: scale(1.05);
             box-shadow: 0 0 15px rgba(100, 116, 139, 0.7), 0 0 30px rgba(100, 116, 139, 0.4);
         }
-        
-        /* AI Suggester Result Box */
-        #ai-result {
-            background: rgba(5, 5, 12, 0.7);
-            border: 1px solid rgba(79, 70, 229, 0.5);
-            border-radius: 1rem;
-            padding: 1.5rem;
-            margin-top: 1.5rem;
-            display: none; /* Hidden by default */
+        /* Ghost buttons */
+        .hero-btn-ghost {
+            background: transparent;
+            border: 2px solid rgba(79, 70, 229, 0.7);
+            color: #c7d2fe; /* Light Indigo */
+            transition: all 0.3s ease;
+        }
+        .hero-btn-ghost:hover {
+            background: rgba(79, 70, 229, 0.2);
+            color: #fff;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(79, 70, 229, 0.4);
         }
         
-        /* Loading Spinner */
-        .loader {
-            width: 32px;
-            height: 32px;
-            border: 4px solid #4f46e5;
-            border-bottom-color: transparent;
-            border-radius: 50%;
-            display: inline-block;
-            box-sizing: border-box;
-            animation: rotation 1s linear infinite;
-            display: none; /* Hidden by default */
-            margin: 1rem auto;
-        }
-
-        @keyframes rotation {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
         /* "Scroll Down" Animated Indicator */
         #scroll-prompt {
-            /* REMOVED position: absolute; */
-            /* REMOVED bottom: 2rem; */
-            /* REMOVED left: 50%; */
-            /* REMOVED transform: translateX(-50%); */
-            /* REMOVED z-index: 20; */
-            
-            position: relative; /* Now part of the content flow */
+            position: relative; 
             color: white;
             font-size: 0.75rem;
             text-transform: uppercase;
@@ -207,16 +272,201 @@
         }
 
         @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        /* --- NEW: Glitch Countdown Timer --- */
+        #countdown-timer {
+            position: fixed;
+            top: 5rem; /* 80px, below header */
+            right: 1.5rem; /* 24px */
+            z-index: 40; /* Below header */
+            background: rgba(15, 15, 28, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.75rem;
+            padding: 0.75rem 1.25rem;
+            text-align: center;
+            display: flex;
+            gap: 0.75rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .countdown-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 40px;
+        }
+        .countdown-number {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 2.25rem; /* 36px */
+            line-height: 1;
+            font-weight: 700;
+            color: #d946ef; /* Magenta */
+            letter-spacing: -0.05em;
+        }
+        .countdown-label {
+            font-size: 0.625rem; /* 10px */
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #a5b4fc; /* Indigo light */
+        }
+        @media (max-width: 768px) {
+            #countdown-timer {
+                top: auto;
+                bottom: 5rem; /* Above back-to-top btn */
+                left: 50%;
+                transform: translateX(-50%);
+                padding: 0.5rem 1rem;
             }
-            40% {
-                transform: translateY(-10px);
+            .countdown-block { min-width: 35px; }
+            .countdown-number { font-size: 1.75rem; }
+            .countdown-label { font-size: 0.5rem; }
+        }
+
+        /* --- NEW: Committee Tabs --- */
+        .committee-tab {
+            background-color: transparent;
+            border: 2px solid #3730a3; /* Indigo dark */
+            color: #a5b4fc; /* Indigo light */
+            transition: all 0.3s ease;
+        }
+        .committee-tab.active,
+        .committee-tab:hover {
+            background-color: #4f46e5; /* Indigo */
+            color: #fff;
+            border-color: #4f46e5;
+            box-shadow: 0 0 15px rgba(79, 70, 229, 0.5);
+        }
+        .committee-content {
+            display: none;
+        }
+        .committee-content.active {
+            display: block;
+        }
+
+        /* --- NEW: Registration Table --- */
+        .fees-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .fees-table th, .fees-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .fees-table th {
+            font-weight: 600;
+            color: #c7d2fe;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+        }
+        .fees-table td {
+            color: #e0e0e0;
+        }
+        .fees-table tr:last-child th,
+        .fees-table tr:last-child td {
+            border-bottom: none;
+        }
+        .fees-table td:last-child {
+            font-weight: 700;
+            font-size: 1.125rem;
+            color: #fff;
+            text-align: right;
+        }
+        
+        /* --- NEW: Premium Scrollbar (FIXED) --- */
+        .custom-scrollbar {
+            scrollbar-width: thin; /* Firefox */
+            scrollbar-color: #4f46e5 #05050c; /* Firefox */
+        }
+        /* Chrome, Edge, Safari */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #3730a3; /* Indigo dark */
+            border-radius: 20px;
+            border: 2px solid transparent;
+        }
+        .custom-scrollbar:hover::-webkit-scrollbar-thumb {
+            background-color: #4f46e5; /* Indigo */
+        }
+
+        /* --- NEW: Scroll Fade Effect --- */
+        .scroll-fade {
+            position: relative;
+            -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
+            mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
+        }
+
+        /* --- NEW: Alternating Feature Grid --- */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+        @media (min-width: 1024px) {
+            .feature-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 4rem;
             }
-            60% {
-                transform: translateY(-5px);
+            .feature-grid .order-last {
+                order: 9999;
             }
         }
+        .feature-image {
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            object-fit: cover;
+            width: 100%;
+            height: 400px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* --- NEW: Auto-Scroll Marquee --- */
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .marquee-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+            mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+        }
+        .marquee-content {
+            display: flex;
+            width: 200%;
+            animation: marquee 40s linear infinite;
+        }
+        .marquee-item {
+            flex-shrink: 0;
+            width: auto;
+            height: 250px;
+            margin: 0 1rem;
+            border-radius: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        .marquee-content:hover {
+            animation-play-state: paused;
+        }
+        .marquee-item:hover {
+            transform: scale(1.03) translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
     </style>
 </head>
 <body class="antialiased">
@@ -224,23 +474,71 @@
     <!-- 3D Background Canvas -->
     <canvas id="bg-canvas"></canvas>
 
+    <!-- NEW: Countdown Timer -->
+    <div id="countdown-timer">
+        <div class="countdown-block">
+            <div id="countdown-days" class="countdown-number">00</div>
+            <div class="countdown-label">Days</div>
+        </div>
+        <div class="countdown-block">
+            <div id="countdown-hours" class="countdown-number">00</div>
+            <div class="countdown-label">Hours</div>
+        </div>
+        <div class="countdown-block">
+            <div id="countdown-mins" class="countdown-number">00</div>
+            <div class="countdown-label">Mins</div>
+        </div>
+        <div class="countdown-block">
+            <div id="countdown-secs" class="countdown-number">00</div>
+            <div class="countdown-label">Secs</div>
+        </div>
+    </div>
+
+
     <!-- Header -->
     <header id="header" class="fixed top-0 left-0 right-0 z-50">
-        <!-- ... (same header code as before) ... -->
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 <!-- Logo / Conference Title -->
                 <div class="flex-shrink-0">
-                    <a href="#" class="nav-link text-2xl font-bold text-white transition-colors hover:text-indigo-400">
+                    <a href="#home" class="nav-link text-2xl font-bold text-white transition-colors hover:text-indigo-400">
                         CSMAI <span class="text-indigo-400">2026</span>
                     </a>
                 </div>
 
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex md:items-center md:space-x-4 lg:space-x-6">
-                    <a href="#about" class="nav-link text-gray-300 hover:text-white transition-colors px-3 py-2 rounded-md text-sm font-medium">ABOUT</a>
+                    
+                    <!-- NEW: About Dropdown -->
+                    <div class="dropdown">
+                        <button class="nav-link text-gray-300 hover:text-white transition-colors px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1">
+                            ABOUT
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-content">
+                                <a href="#about" class="nav-link block px-5 py-3 text-sm text-gray-300 hover:text-white hover:bg-indigo-600">CSMAI 2026</a>
+                                <a href="#venue" class="nav-link block px-5 py-3 text-sm text-gray-300 hover:text-white hover:bg-indigo-600">About UAMD</a>
+                            </div>
+                        </div>
+                    </div>
+
                     <a href="#committees" class="nav-link text-gray-300 hover:text-white transition-colors px-3 py-2 rounded-md text-sm font-medium">COMMITTEES</a>
-                    <a href="#author" class="nav-link text-gray-300 hover:text-white transition-colors px-3 py-2 rounded-md text-sm font-medium">AUTHOR</a>
+                    
+                    <!-- NEW: Author Dropdown -->
+                    <div class="dropdown">
+                        <button class="nav-link text-gray-300 hover:text-white transition-colors px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1">
+                            AUTHOR
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-content">
+                                <a href="#author" class="nav-link block px-5 py-3 text-sm text-gray-300 hover:text-white hover:bg-indigo-600">Call for Papers</a>
+                                <a href="#submission" class="nav-link block px-5 py-3 text-sm text-gray-300 hover:text-white hover:bg-indigo-600">Submission</a>
+                            </div>
+                        </div>
+                    </div>
+
                     <a href="#registration" class="nav-link text-gray-300 hover:text-white transition-colors px-3 py-2 rounded-md text-sm font-medium">REGISTRATION</a>
                     <a href="#dates" class="nav-link text-gray-300 hover:text-white transition-colors px-3 py-2 rounded-md text-sm font-medium">DATES</a>
                     <a href="#publication" class="nav-link text-gray-300 hover:text-white transition-colors px-3 py-2 rounded-md text-sm font-medium">PUBLICATION</a>
@@ -265,11 +563,35 @@
         </nav>
 
         <!-- Mobile Menu, slides down from top -->
-        <div id="mobile-menu" class="mobile-menu md:hidden fixed top-20 left-0 right-0 bg-gray-900 z-50">
+        <div id="mobile-menu" class="mobile-menu md:hidden fixed top-20 left-0 right-0 z-50">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 text-center">
-                <a href="#about" class="nav-link block px-3 py-3 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800">ABOUT</a>
+                
+                <!-- Mobile: About Dropdown -->
+                <div>
+                    <button class="dropdown-toggle-mobile w-full flex justify-center items-center gap-1 px-3 py-3 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800">
+                        ABOUT
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="dropdown-menu-mobile">
+                        <a href="#about" class="nav-link block px-3 py-3 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">CSMAI 2026</a>
+                        <a href="#venue" class="nav-link block px-3 py-3 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">About UAMD</a>
+                    </div>
+                </div>
+
                 <a href="#committees" class="nav-link block px-3 py-3 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800">COMMITTEES</a>
-                <a href="#author" class="nav-link block px-3 py-3 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800">AUTHOR</a>
+
+                <!-- Mobile: Author Dropdown -->
+                <div>
+                    <button class="dropdown-toggle-mobile w-full flex justify-center items-center gap-1 px-3 py-3 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800">
+                        AUTHOR
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div class="dropdown-menu-mobile">
+                        <a href="#author" class="nav-link block px-3 py-3 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">Call for Papers</a>
+                        <a href="#submission" class="nav-link block px-3 py-3 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">Submission</a>
+                    </div>
+                </div>
+
                 <a href="#registration" class="nav-link block px-3 py-3 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800">REGISTRATION</a>
                 <a href="#dates" class="nav-link block px-3 py-3 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800">DATES</a>
                 <a href="#publication" class="nav-link block px-3 py-3 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800">PUBLICATION</a>
@@ -281,20 +603,24 @@
     <!-- Main Content -->
     <main>
         <!-- Hero Section -->
-        <!-- This section is now a "scaffolding" for the 3D scene -->
-        <section id="home" class="relative min-h-screen flex items-center justify-center text-center overflow-hidden pt-20"> <!-- CHANGED: h-screen to min-h-screen, ADDED pt-20 -->
-            <div class="relative z-10 p-4 max-w-4xl mx-auto"> <!-- REMOVED: pt-24 -->
+        <section id="home" class="relative min-h-screen flex items-center justify-center text-center overflow-hidden pt-20">
+            <div class="relative z-10 p-4 max-w-4xl mx-auto">
                 <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-tight">
-                    International Conference on
-                    <span class="block section-title">Complex System Modelling and Artificial Intelligence</span>
+                    <span id="hero-line-1"></span>
                 </h1>
+                <h2 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight section-title mt-2">
+                    <span id="hero-line-2"></span>
+                </h2>
+                
                 <p class="mt-6 text-2xl sm:text-3xl font-bold text-indigo-300">CSMAI 2026</p>
                 <div class="mt-8 text-lg sm:text-xl text-gray-300 space-y-2">
                     <p><strong class="font-semibold text-white">Dates:</strong> 28-29 May 2026</p>
                     <p><strong class="font-semibold text-white">Venue:</strong> Universiteti “Aleksandër Moisiu”, Durrës, Albania</p>
                 </div>
+
+                <!-- Primary Buttons -->
                 <div class="mt-12 flex flex-col sm:flex-row justify-center gap-4">
-                    <a href="#author" class="nav-link hero-btn hero-btn-primary inline-block bg-indigo-600 text-white font-semibold px-8 py-3 rounded-full text-lg shadow-lg hover:bg-indigo-500 transition-all">
+                    <a href="#submission" class="nav-link hero-btn hero-btn-primary inline-block bg-indigo-600 text-white font-semibold px-8 py-3 rounded-full text-lg shadow-lg hover:bg-indigo-500 transition-all">
                         Submit a Paper
                     </a>
                     <a href="#registration" class="nav-link hero-btn hero-btn-secondary inline-block bg-gray-700 text-white font-semibold px-8 py-3 rounded-full text-lg shadow-lg hover:bg-gray-600 transition-all">
@@ -302,8 +628,21 @@
                     </a>
                 </div>
 
+                <!-- NEW: Secondary Ghost Buttons -->
+                <div class="mt-6 flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="#schedule" class="nav-link hero-btn hero-btn-ghost inline-block font-semibold px-6 py-2 rounded-full text-sm">
+                        Presentation Schedule
+                    </a>
+                    <a href="#speakers" class="nav-link hero-btn hero-btn-ghost inline-block font-semibold px-6 py-2 rounded-full text-sm">
+                        Speakers
+                    </a>
+                    <a href="#agenda" class="nav-link hero-btn hero-btn-ghost inline-block font-semibold px-6 py-2 rounded-full text-sm">
+                        Agenda
+                    </a>
+                </div>
+
                 <!-- New Scroll Down Prompt Location -->
-                <div id="scroll-prompt" class="mt-12 sm:mt-16"> <!-- Added margin-top -->
+                <div id="scroll-prompt" class="mt-12 sm:mt-16">
                     Scroll to discover
                     <span>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -322,33 +661,36 @@
                     <div class="text-center">
                         <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl section-title inline-block">About the Conference</h2>
                     </div>
-                    <div class="mt-16 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div class="mt-16 grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
                         <!-- Left Column: About Conference -->
                         <div class="premium-card p-8 md:p-12">
                             <h3 class="text-2xl font-semibold text-indigo-300">Welcome to CSMAI 2026</h3>
-                            <p class="mt-4 text-lg text-gray-300">
+                            <p class="mt-4 text-lg text-gray-300 text-justify"> <!-- EDITED: Added text-justify -->
                                 The International Conference on Complex System Modelling and Artificial Intelligence (CSMAI 2026) aims to bring together researchers, academicians, and industry professionals to discuss the latest advancements, trends, and challenges in the fields of complex systems and artificial intelligence.
                             </p>
-                            <p class="mt-4 text-lg text-gray-300">
+                            <p class="mt-4 text-lg text-gray-300 text-justify"> <!-- EDITED: Added text-justify -->
                                 This conference serves as a global platform for the exchange of innovative ideas, emerging methodologies, and transformative research that bridge theoretical foundations with real-world applications.
                             </p>
                         </div>
                         
-                        <!-- Right Column: About UAMD -->
-                        <div class="premium-card p-8 md:p-12 lg:mt-0" style="animation: float 6s ease-in-out infinite;">
-                            <h3 class="text-2xl font-semibold text-purple-300">About the Venue: UAMD</h3>
-                            <p class="mt-4 text-lg text-gray-300">
-                                Universiteti “Aleksandër Moisiu” Durrës (UAMD) is one of Albania’s leading public universities, known for its commitment to academic excellence, innovation, and international collaboration.
-                            </p>
-                            <p class="mt-4 text-lg text-gray-300">
-                                Situated in the coastal city of Durrës — a vibrant hub of culture, technology, and commerce — UAMD provides an inspiring environment for learning, research, and innovation.
-                            </p>
+                        <!-- Right Column: About UAMD (NEW ID) -->
+                        <!-- EDITED: Replaced float animation with a background image -->
+                        <div id="venue" class="premium-card image-card-bg p-8 md:p-12 lg:mt-0" style="background-image: url('image (7).jpg');">
+                            <div class="relative z-10"> <!-- Added relative z-index for content -->
+                                <h3 class="text-2xl font-semibold text-purple-300">About the Venue: UAMD</h3>
+                                <p class="mt-4 text-lg text-gray-200 text-justify"> <!-- EDITED: Brighter text for bg image -->
+                                    Universiteti “Aleksandër Moisiu” Durrës (UAMD) is one of Albania’s leading public universities, known for its commitment to academic excellence, innovation, and international collaboration.
+                                </p>
+                                <p class="mt-4 text-lg text-gray-200 text-justify"> <!-- EDITED: Brighter text for bg image -->
+                                    Situated in the coastal city of Durrës — a vibrant hub of culture, technology, and commerce — UAMD provides an inspiring environment for learning, research, and innovation.
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Committees Section (Placeholder) -->
+            <!-- NEW: Committees Section (Complete Overhaul) -->
             <section id="committees" class="py-24 sm:py-32 fade-in-section">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="text-center">
@@ -356,47 +698,188 @@
                         <p class="mt-4 text-lg leading-8 text-gray-300">Meet the dedicated team and renowned experts guiding CSMAI 2026.</p>
                     </div>
 
-                    <!-- Committee Sub-section -->
-                    <div class="mt-16">
-                        <h3 class="text-2xl font-semibold text-center text-indigo-300">General Chairs</h3>
+                    <!-- Main Leadership Cards -->
+                    <div class="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="premium-card p-6 text-center">
+                            <h4 class="text-xl font-semibold text-white">Ernaso Kerbizi</h4>
+                            <p class="text-indigo-400">Patron</p>
+                            <p class="text-sm text-gray-400">Rochester Institute of Technology, Tirana</p>
+                        </div>
+                        <div class="premium-card p-6 text-center transform md:scale-105 border-2 border-purple-500 shadow-purple-500/30 shadow-2xl">
+                            <h4 class="text-xl font-semibold text-white">Siddhartha Bhattacharyya</h4>
+                            <p class="text-purple-300">General Chair</p>
+                            <p class="text-sm text-gray-400">VSB - Technical University of Ostrava, Czechia</p>
+                        </div>
+                        <div class="premium-card p-6 text-center">
+                            <h4 class="text-xl font-semibold text-white">Robert Muharremi</h4>
+                            <p class="text-indigo-400">Program Chair</p>
+                            <p class="text-sm text-gray-400">Rochester Institute of Technology, Tirana</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Honorary Chairs -->
+                    <div class="mt-12">
+                        <h3 class="text-2xl font-semibold text-center text-indigo-300">Honorary Chairs</h3>
                         <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                            <!-- Placeholder Card 1 -->
                             <div class="premium-card p-6 text-center">
-                                <img class="w-24 h-24 rounded-full mx-auto bg-gray-700" src="https://placehold.co/96x96/4a5568/e0e0e0?text=Photo" alt="Dr. Placeholder">
-                                <h4 class="mt-4 text-xl font-semibold text-white">Prof. Dr. Elinda Kajo</h4>
-                                <p class="text-indigo-400">Universiteti “Aleksandër Moisiu”, Albania</p>
+                                <h4 class="mt-4 text-xl font-semibold text-white">Prof. (Dr.) Tingwen Huang, FIEEE</h4>
+                                <p class="text-indigo-400">Shenzhen University of Advanced Technology, China</p>
                             </div>
-                            <!-- Placeholder Card 2 -->
                             <div class="premium-card p-6 text-center">
-                                <img class="w-24 h-24 rounded-full mx-auto bg-gray-700" src="https://placehold.co/96x96/4a5568/e0e0e0?text=Photo" alt="Dr. Placeholder">
-                                <h4 class="mt-4 text-xl font-semibold text-white">Prof. Dr. Placeholder</h4>
-                                <p class="text-indigo-400">University of Example, Country</p>
+                                <h4 class="mt-4 text-xl font-semibold text-white">Prof. (Dr.) Vincenzo Piuri, FIEEE</h4>
+                                <p class="text-indigo-400">Universita' degli Studi di Milano, Italy</p>
                             </div>
-                            <!-- Placeholder Card 3 -->
                             <div class="premium-card p-6 text-center">
-                                <img class="w-24 h-24 rounded-full mx-auto bg-gray-700" src="https://placehold.co/96x96/4a5568/e0e0e0?text=Photo" alt="Dr. Placeholder">
-                                <h4 class="mt-4 text-xl font-semibold text-white">Dr. Sample Name</h4>
-                                <p class="text-indigo-400">Research Institute, Country</p>
+                                <h4 class="mt-4 text-xl font-semibold text-white">Prof. (Dr.) Orion Zavalani</h4>
+                                <p class="text-indigo-400">Rector of RIT Tirana</p>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Technical Program Committee -->
+                    <!-- Committee Lists (Tabbed Interface) -->
                     <div class="mt-20">
-                        <h3 class="text-2xl font-semibold text-center text-indigo-300">Technical Program Committee</h3>
-                        <div class="mt-8 premium-card p-8 md:p-12">
-                            <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4 text-gray-300">
-                                <li>Dr. A. B. Cde, University, Country</li>
-                                <li>Prof. F. G. Hijk, Institute, Country</li>
-                                <li>Dr. L. M. Nop, University, Country</li>
-                                <li>Prof. Q. R. Stu, University, Country</li>
-                                <li>Dr. V. W. Xyz, Institute, Country</li>
-                                <li>Prof. J. K. Lmn, University, Country</li>
-                                <li>Dr. P. Q. Rst, University, Country</li>
-                                <li>Prof. U. V. Wxy, Institute, Country</li>
-                                <li>Dr. Z. A. Bcd, University, Country</li>
-                            </ul>
-                            <p class="mt-6 text-center text-gray-400 italic">(More members to be announced...)</p>
+                        <!-- Tab Buttons -->
+                        <div class="flex flex-col sm:flex-row justify-center gap-4">
+                            <button class="committee-tab active px-6 py-3 rounded-full font-semibold" data-tab="organizing">Organizing Committee</button>
+                            <button class="committee-tab px-6 py-3 rounded-full font-semibold" data-tab="technical">Technical Program Committee</button>
+                            <button class="committee-tab px-6 py-3 rounded-full font-semibold" data-tab="advisory">International Advisory Committee</button>
+                        </div>
+
+                        <!-- Tab Content -->
+                        <div class="mt-12">
+                            <!-- Organizing Committee Content -->
+                            <div id="tab-organizing" class="committee-content active">
+                                <div class="premium-card p-8 md:p-12 max-h-96 overflow-y-auto custom-scrollbar scroll-fade">
+                                    <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4 text-gray-300">
+                                        <li><strong>Convener:</strong> Debabrata Samanta, RIT, Tirana</li>
+                                        <li><strong>Publication Chair:</strong> Blerta Prevalla Etemi, RIT, Kosovo</li>
+                                        <li><strong>Organizing Secretary:</strong> Lindita Bicaj, RIT, Kosovo</li>
+                                        <li><strong>Finance Chair:</strong> Ajten Cami, RIT, Kosovo</li>
+                                        <li><strong>Finance Chair:</strong> Teuta Vitia, RIT, Kosovo</li>
+                                        <li><strong>Publicity Chair:</strong> Alba Ymerhalili, RIT, Tirana</li>
+                                        <li>Jasmina Bardulla, RIT, Tirana</li>
+                                        <li>Albina Balidemaj, RIT, Kosovo</li>
+                                        <li>Edmond Muhaxheri, RIT, Kosovo</li>
+                                        <li>Ines Bula, RIT, Kosovo</li>
+                                        <li>Mimoza Polloshka, RIT, Kosovo</li>
+                                        <li>Venera Demukaj, RIT, Kosovo</li>
+                                        <li>Linda Ziberi, RIT, Kosovo</li>
+                                        <li>Mrika Kotorri, RIT, Kosovo</li>
+                                        <li>Arlinda Hajdari, RIT, Kosovo</li>
+                                        <li>Agon Nimani, RIT, Kosovo</li>
+                                        <li>Reid Pierce, RIT, Kosovo</li>
+                                        <li>Edon Muhaxheri, RIT, Kosovo</li>
+                                        <li>Ermir Rogova, RIT, Kosovo</li>
+                                        <li>Krenar Kepuska, RIT, Kosovo</li>
+                                        <li>Mimoza Mustafa, RIT, Kosovo</li>
+                                        <li>Muharrem Salihaj, RIT, Kosovo</li>
+                                        <li>Xhavit Gashi, RIT, Kosovo</li>
+                                        <li>Lindita Bicaj, RIT, Kosovo</li>
+                                        <li>Lavon Bajrami, RIT, Kosovo</li>
+                                        <li>Avenda Rexhaj, RIT, Kosovo</li>
+                                        <li>Rajesh Kanna R, CHRIST, India</li>
+                                        <li>Joe Magliocco, RIT, Tirana</li>
+                                        <li>Medina Orana, RIT, Tirana</li>
+                                        <li>Erik Benson, RIT, Tirana</li>
+                                        <li>Steftcho Dokov, RIT, Tirana</li>
+                                        <li>Dalina Canhasi, RIT, Kosovo</li>
+                                        <li>Linor Gashi, RIT, Kosovo</li>
+                                        <li>Irsa Doci, RIT, Tirana</li>
+                                        <li>Klajdi Spahiu, RIT, Tirana</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Technical Program Committee Content -->
+                            <div id="tab-technical" class="committee-content">
+                                <div class="premium-card p-8 md:p-12 max-h-96 overflow-y-auto custom-scrollbar scroll-fade">
+                                    <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4 text-gray-300">
+                                        <li>Naim Fejzullahu, RIT, Kosovo</li>
+                                        <li>Leonard Camaj, RIT, Kosovo</li>
+                                        <li>Gani Shasivari, RIT, Kosovo</li>
+                                        <li>Guri Sokoli, RIT, Kosovo</li>
+                                        <li>Agon Nimani, RIT, Kosovo</li>
+                                        <li>Driart Elshani, RIT, Kosovo</li>
+                                        <li>Edon Muhaxheri, RIT, Kosovo</li>
+                                        <li>Ermir Rogova, RIT, Kosovo</li>
+                                        <li>Krenar Kepuska, RIT, Kosovo</li>
+                                        <li>Mimoza Mustafa, RIT, Kosovo</li>
+                                        <li>Mimoza Polloshka, RIT, Kosovo</li>
+                                        <li>Xhavit Gashi, RIT, Kosovo</li>
+                                        <li>Dr. Suplab Kanti Podder, Dayananda Sagar College, India</li>
+                                        <li>Dr. Gurunath R, Dayananda Sagar College, India</li>
+                                        <li>Prof. Hemant Uppala, Dayananda Sagar College, India</li>
+                                        <li>Dr. Kumudavalli, Dayananda Sagar College, India</li>
+                                        <li>Dr. Venkatesh B R, Dayananda Sagar College, India</li>
+                                        <li>Dr. Kadambini Katke, Dayananda Sagar College, India</li>
+                                        <li>Dr. R Pavithra, Dayananda Sagar College, India</li>
+                                        <li>Dr. Puja Sharma, Dayananda Sagar College, India</li>
+                                        <li>Dr. Meghana C, Dayananda Sagar College, India</li>
+                                        <li>Dr. Geetha Lakshmi N, Dayananda Sagar College, India</li>
+                                        <li>Dr. Monica Ranka, Dayananda Sagar College, India</li>
+                                        <li>Dr. Kotresh Savanur, Dayananda Sagar College, India</li>
+                                        <li>Arun Agarwal, Siksha 'O' Anusandhan, India</li>
+                                        <li>HEUNG-NO LEE, Gwangju Institute, South Korea</li>
+                                        <li>M. S. Mekala, Yeungnam University, Korea</li>
+                                        <li>Mohammad Zubair Khan, Taibah University, Saudi Arabia</li>
+                                        <li>G. Samusev, Immanuel Kant Baltic Federal University, Russia</li>
+                                        <li>Goutam Kumar Dalapati, Ming Chi University, Taiwan</li>
+                                        <li>Tapan Kumar Behera, Forrester Research Inc, USA</li>
+                                        <li>Yagyanath Rimal, Pokhara University, Nepal</li>
+                                        <li>Daksh Agarwal, University of Pennsylvania, USA</li>
+                                        <li>V B Murali Krishna, NIT Andhra Pradesh, India</li>
+                                        <li>Daya Sagar Gupta, IIT Mandi, India</li>
+                                        <li>Marimuthu Karuppiah, Presidency University, India</li>
+                                        <li>Ayan Das, Birla Institute of Technology, India</li>
+                                        <li>Soumen Atta, University of Nova Gorica, Slovenia</li>
+                                        <li>Muskan Garg, Mayo Clinic, USA</li>
+                                        <li>SK Hafizul Islam, IIIT Kalyani, India</li>
+                                        <li>Arup Kumar Pal, IIT (ISM) Dhanbad, India</li>
+                                        <li>Shivamurthaiah Mallaiah, Dr. SMCE-VTU, India</li>
+                                        <li>Debabrata Singh, Siksha 'O' Anusandhan, India</li>
+                                        <li>Maity, IIIT, Allahabad, India</li>
+                                        <li>Jyoti Prakash Singh, NIT Patna, India</li>
+                                        <li>Sabyasachi Mukhopadhyay, IIT Kharagpur, India</li>
+                                        <li>Sandeep Singh Sengar, Cardiff Metropolitan University, UK</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- International Advisory Committee Content -->
+                            <div id="tab-advisory" class="committee-content">
+                                <div class="premium-card p-8 md:p-12 max-h-96 overflow-y-auto custom-scrollbar scroll-fade">
+                                    <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4 text-gray-300">
+                                        <li>Prof. Sankar K. Pal, Indian Statistical Institute, India</li>
+                                        <li>Prof. Nikhil Ranjan Pal, Indian Statistical Institute, India</li>
+                                        <li>Prof. Ujjwal Maulik, Jadavpur University, India</li>
+                                        <li>Prof. Shivamurthaiah M, Sapthagiri NPS University, India</li>
+                                        <li>Prof. Bondada Praveen, Marri Laxman Reddy Inst., India</li>
+                                        <li>Prof. Anupam Basu, IIT Kharagpur, India</li>
+                                        <li>Prof. Amit Konar, Jadavpur University, India</li>
+                                        <li>Prof. Bidyut Baran Chaudhuri, Indian Statistical Institute, India</li>
+                                        <li>Prof. Sushmita Mitra, Indian Statistical Institute, India</li>
+                                        <li>Prof. Bijaya Ketan Panigrahi, IIT Delhi, India</li>
+                                        <li>Prof. Ponnuthurai Nagaratnam, Nanyang Tech. University, Singapore</li>
+                                        <li>Prof. Elizabeth C. Behrman, Wichita State University, USA</li>
+                                        <li>Prof. Rajkumar Buyya, The University of Melbourne, Australia</li>
+                                        <li>Prof. Saman K. Halgamuge, The University of Melbourne, Australia</li>
+                                        <li>Prof. Aboul Ella Hassanien, Cairo University, Egypt</li>
+                                        <li>Prof. Mario Koeppen, Kyushu Institute of Technology, Japan</li>
+                                        <li>Prof. Rudolf Kruse, Otto-von-Guericke University, Germany</li>
+                                        <li>Prof. Janusz Kacpryzk, Polish Academy of Sciences, Poland</li>
+                                        <li>Prof. Bhabani P. Sinha, Indian Statistical Institute, India</li>
+                                        <li>Prof. Malay Kumar Kundu, Indian Statistical Institute, India</li>
+                                        <li>Prof. Vincenzo Piuri, University of Milan, Italy</li>
+                                        <li>Prof. Bhargab B. Bhattacharya, Indian Statistical Institute, India</li>
+                                        <li>Prof. Wei-Chang Yeh, National Tsing Hua University, Taiwan</li>
+                                        <li>Prof. Punam Kumar Saha, University of Iowa, USA</li>
+                                        <li>Pawan Lingras, Saint Mary’s University, Canada</li>
+                                        <li>Prof. Sukumar Nandy, IIT Guwahati, India</li>
+                                        <li>Prof. L. M. Patnaik, IISc, Bangalore, India</li>
+                                        <li>Prof. K. V. S. Hari, IISc Bangalore, India</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -410,45 +893,36 @@
                         <p class="mt-4 text-lg leading-8 text-gray-300">Researchers, academicians, and practitioners are invited to submit original and unpublished research papers.</p>
                     </div>
                     
+                    <!-- EDITED: Replaced bullet lists with visual topic cards -->
                     <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        
                         <!-- Card 1: Complex System Modelling -->
-                        <div class="premium-card p-8">
-                            <h3 class="text-xl font-semibold text-indigo-300">Complex System Modelling</h3>
-                            <ul class="mt-4 list-disc list-inside space-y-2 text-gray-300">
-                                <li>Nonlinear dynamic systems</li>
-                                <li>Computational modeling and simulation</li>
-                                <li>Multi-agent systems</li>
-                                <li>Network theory and analysis</li>
-                                <li>Self-organization and emergent behavior</li>
-                            </ul>
+                        <div class="premium-card topic-card">
+                            <img src="Image/Lecturehall.jpg" alt="Lecture Hall">
+                            <div class="topic-card-content">
+                                <h3 class="text-xl font-semibold text-indigo-300">Complex System Modelling</h3>
+                            </div>
                         </div>
                         
                         <!-- Card 2: AI and Machine Learning -->
-                        <div class="premium-card p-8">
-                            <h3 class="text-xl font-semibold text-indigo-300">AI and Machine Learning</h3>
-                            <ul class="mt-4 list-disc list-inside space-y-2 text-gray-300">
-                                <li>Deep learning and neural networks</li>
-                                <li>Reinforcement learning and optimization</li>
-                                <li>Explainable AI (XAI) and trustworthy AI</li>
-                                <li>Cognitive computing and hybrid intelligence</li>
-                                <li>Natural language processing and computer vision</li>
-                            </ul>
+                        <div class="premium-card topic-card">
+                            <img src="Image/image (9).jpg" alt="AI and Machine Learning">
+                            <div class="topic-card-content">
+                                <h3 class="text-xl font-semibold text-indigo-300">AI and Machine Learning</h3>
+                            </div>
                         </div>
                         
                         <!-- Card 3: Applications -->
-                        <div class="premium-card p-8">
-                            <h3 class="text-xl font-semibold text-indigo-300">Applications of AI & Complex Systems</h3>
-                            <ul class="mt-4 list-disc list-inside space-y-2 text-gray-300">
-                                <li>Smart cities and intelligent transportation</li>
-                                <li>IoT-based systems and digital twins</li>
-                                <li>Cybersecurity and intelligent threat detection</li>
-                                <li>AI in healthcare, finance, and education</li>
-                                <li>Sustainable development and green AI</li>
-                            </ul>
+                        <div class="premium-card topic-card">
+                            <img src="Image/image (8).jpg" alt="Tech Lab">
+                            <div class="topic-card-content">
+                                <h3 class="text-xl font-semibold text-indigo-300">Applications of AI & Complex Systems</h3>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="mt-16 text-center">
+                    <!-- NEW Submission Section ID -->
+                    <div id="submission" class="mt-16 text-center pt-16"> <!-- Added padding-top for scroll anchor -->
                         <h3 class="text-2xl font-semibold text-white">Submission Guidelines</h3>
                         <p class="mt-4 text-lg text-gray-300 max-w-2xl mx-auto">
                             All papers must be original and not simultaneously submitted to another journal or conference. Submissions should follow the IEEE conference paper format. (Placeholder text - please update with actual guidelines).
@@ -460,95 +934,125 @@
                 </div>
             </section>
 
-            <!-- AI Track Suggester Section (FIXED) -->
-            <section id="ai-suggester" class="py-24 sm:py-32 fade-in-section">
+            <!-- --- NEW: Memorable Venue Section --- -->
+            <section id="experience" class="py-24 sm:py-32 fade-in-section">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="text-center max-w-3xl mx-auto">
-                        <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl section-title inline-block">AI Track Suggester</h2>
-                        <p class="mt-4 text-lg leading-8 text-gray-300">
-                            Have a research abstract? Paste it below and let our AI suggest the most relevant conference track for your submission.
-                        </p>
+                    <div class="text-center">
+                        <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl section-title inline-block">A Memorable Venue</h2>
+                        <p class="mt-4 text-lg leading-8 text-gray-300">More than a conference. An experience.</p>
                     </div>
 
-                    <div class="mt-16 max-w-3xl mx-auto premium-card p-8 md:p-12">
-                        <div class="space-y-6">
-                            <div>
-                                <label for="abstract-input" class="block text-sm font-medium text-gray-300">Your Research Abstract</label>
-                                <textarea id="abstract-input" name="abstract" rows="8" required class="mt-2 block w-full rounded-lg border-gray-600 bg-gray-800 text-white p-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Enter your abstract here (at least 50 words)..."></textarea>
+                    <div class="mt-20 space-y-16">
+                        <!-- Feature 1: The City -->
+                        <div class="feature-grid">
+                            <img src="Image/image (2).jpg" alt="City of Durrës" class="feature-image">
+                            <div class="premium-card p-8 md:p-12">
+                                <h3 class="text-2xl font-semibold text-indigo-300">Explore Historic Durrës</h3>
+                                <p class="mt-4 text-lg text-gray-300 text-justify">
+                                    Situated in the coastal city of Durrës, a vibrant hub of culture, technology, and commerce, UAMD provides an inspiring environment for learning, research, and innovation. Explore a city where modern life meets ancient history.
+                                </p>
                             </div>
-                            <div class="text-center">
-                                <button id="suggest-track-btn" class="hero-btn hero-btn-primary inline-block bg-indigo-600 text-white font-semibold px-8 py-3 rounded-full text-lg shadow-lg hover:bg-indigo-500 transition-all disabled:opacity-50"
-                                >
-                                    Get AI Recommendation
-                                </button>
-                            </div>
-                            
-                            <!-- Loader -->
-                            <div id="ai-loader" class="loader mx-auto" style="display: none;"></div>
-                            
-                            <!-- Error Message -->
-                            <div id="ai-error" class="text-red-400 text-center" style="display: none;"></div>
+                        </div>
 
-                            <!-- Result Box -->
-                            <div id="ai-result" style="display: none;">
-                                <!-- Use <pre> to preserve line breaks from the AI response -->
-                                <pre id="ai-result-text" class="text-lg text-white whitespace-pre-wrap font-sans"></pre>
+                        <!-- Feature 2: The Community -->
+                        <div class="feature-grid">
+                             <div class="premium-card p-8 md:p-12 lg:order-last">
+                                <h3 class="text-2xl font-semibold text-purple-300">Join a Global Community</h3>
+                                <p class="mt-4 text-lg text-gray-300 text-justify">
+                                    CSMAI 2026 serves as a global platform for the exchange of innovative ideas, emerging methodologies, and transformative research. Network with leading experts, share novel insights, and foster interdisciplinary collaborations.
+                                </p>
+                            </div>
+                            <img src="Image/image (6).jpg" alt="Conference Attendees" class="feature-image">
+                        </div>
+
+                        <!-- Feature 3: The Culture -->
+                        <div class="feature-grid">
+                            <img src="Image/image (3).jpg" alt="Durrës at Night" class="feature-image">
+                            <div class="premium-card p-8 md:p-12">
+                                <h3 class="text-2xl font-semibold text-indigo-300">Experience Albanian Culture</h3>
+                                <p class="mt-4 text-lg text-gray-300 text-justify">
+                                    Beyond the conference halls, discover the rich culture and hospitality of Albania. From scenic coastlines to vibrant city life, Durrës offers a memorable backdrop for an unforgettable conference.
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Registration Section (Placeholder) -->
-            <section id="registration" class="py-24 sm:py-32 fade-in-section">
+
+            <!-- NEW: Registration Section (Complete Overhaul) -->
+            <section id="registration" class="py-24 sm:py-32 bg-gray-900 bg-opacity-30 fade-in-section">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="text-center">
-                        <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl section-title inline-block">Registration</h2>
-                        <p class="mt-4 text-lg leading-8 text-gray-300">Join us in Durrës, Albania for this premier event. Register now to secure your spot.</p>
+                        <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl section-title inline-block">Registration & Fees</h2>
+                        <p class="mt-4 text-lg leading-8 text-gray-300">Join us in Durrës, Albania. Register now to secure your spot.</p>
                     </div>
                     
-                    <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                        <!-- Registration Card 1: Student -->
-                        <div class="premium-card p-8 text-center border-2 border-indigo-500 shadow-indigo-500/30 shadow-2xl">
-                            <h3 class="text-2xl font-semibold text-indigo-300">Student Registration</h3>
-                            <p class="mt-4 text-5xl font-extrabold text-white">$250</p>
-                            <p class="text-gray-400">(Early Bird)</p>
-                            <ul class="mt-6 space-y-2 text-gray-300">
-                                <li>Access to all sessions</li>
-                                <li>Conference Kit</li>
-                                <li>Lunches & Coffee Breaks</li>
-                                <li>Gala Dinner</li>
-                            </ul>
-                            <a href="#" class="mt-8 block w-full bg-indigo-600 text-white font-semibold px-6 py-3 rounded-full shadow-lg hover:bg-indigo-500 transition-all">Register as Student</a>
-                        </div>
+                    <div class="mt-16 grid grid-cols-1 lg:grid-cols-5 gap-12 items-start">
                         
-                        <!-- Registration Card 2: Regular -->
-                        <div class="premium-card p-8 text-center transform md:scale-110 border-2 border-purple-500 shadow-purple-500/30 shadow-2xl">
-                             <h3 class="text-2xl font-semibold text-purple-300">Regular Registration</h3>
-                            <p class="mt-4 text-5xl font-extrabold text-white">$400</p>
-                            <p class="text-gray-400">(Early Bird)</p>
-                            <ul class="mt-6 space-y-2 text-gray-300">
-                                <li>Access to all sessions</li>
-                                <li>Conference Kit</li>
-                                <li>Lunches & Coffee Breaks</li>
-                                <li>Gala Dinner & Proceedings</li>
-                            </ul>
-                            <a href="#" class="mt-8 block w-full bg-purple-600 text-white font-semibold px-6 py-3 rounded-full shadow-lg hover:bg-purple-500 transition-all">Register as Regular</a>
+                        <!-- Fees Card -->
+                        <div class="lg:col-span-3 premium-card p-8 md:p-12">
+                            <h3 class="text-2xl font-semibold text-indigo-300 mb-6">Conference Participation Fees</h3>
+                            <div class="overflow-x-auto">
+                                <table class="fees-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Categories</th>
+                                            <th>Registration Fee</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Authors (Academia / Industry / Research Scholar)</td>
+                                            <td>200 Euro</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Authors (Low-income countries)</td>
+                                            <td>100 Euro</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p class="mt-6 text-gray-300">
+                                <strong class="text-white">Note:</strong> Additional pages over 12 pages will incur a fee of 10 Euro per page. Registration fee includes participation in tutorials and conference.
+                            </p>
+                            <h3 class="text-2xl font-semibold text-indigo-300 mt-10 mb-6">Cancellation Policy</h3>
+                            <p class="text-gray-300">
+                                No refunds can be provided on the registration fee on cancellation. Once submitted, papers cannot be withdrawn.
+                            </p>
                         </div>
-                        
-                        <!-- Registration Card 3: Virtual -->
-                        <div class="premium-card p-8 text-center border-2 border-teal-500 shadow-teal-500/30 shadow-2xl">
-                             <h3 class="text-2xl font-semibold text-teal-300">Virtual Attendee</h3>
-                            <p class="mt-4 text-5xl font-extrabold text-white">$150</p>
-                            <p class="text-gray-400">(Online Access)</p>
-                            <ul class="mt-6 space-y-2 text-gray-300">
-                                <li>Virtual access to all keynotes</li>
-                                <li>Virtual access to paper sessions</li>
-                                <li>E-Proceedings</li>
-                                <li>-</li>
-                            </ul>
-                            <a href="#" class="mt-8 block w-full bg-teal-600 text-white font-semibold px-6 py-3 rounded-full shadow-lg hover:bg-teal-500 transition-all">Register as Virtual</a>
+
+                        <!-- Payment Details Card -->
+                        <div class="lg:col-span-2 premium-card p-8 md:p-12 border-2 border-purple-500 shadow-purple-500/30 shadow-2xl">
+                            <h3 class="text-2xl font-semibold text-purple-300 mb-6">Payment Details</h3>
+                            <dl class="space-y-4">
+                                <div>
+                                    <dt class="text-sm font-medium text-gray-400">Account Name</dt>
+                                    <dd class="text-lg font-semibold text-white">FONDACIONI INSTITUTI TEKNOLOGJIK I TIRANES</dd>
+                                </div>
+                                <div>
+                                    <dt class="text-sm font-medium text-gray-400">Account Number</dt>
+                                    <dd class="text-lg font-semibold text-white">107996031801</dd>
+                                </div>
+                                <div>
+                                    <dt class="text-sm font-medium text-gray-400">IBAN</dt>
+                                    <dd class="text-lg font-semibold text-white">AL69208110080000107996031801</dd>
+                                </div>
+                                <div>
+                                    <dt class="text-sm font-medium text-gray-400">Swift Code</dt>
+                                    <dd class="text-lg font-semibold text-white">USALALTR</dd>
+                                </div>
+                                <div>
+                                    <dt class="text-sm font-medium text-gray-400">Bank Name</dt>
+                                    <dd class="text-lg font-semibold text-white">Intesa Sanpaolo Bank Albania</dd>
+                                </div>
+                                <div>
+                                    <dt class="text-sm font-medium text-gray-400">Bank Address</dt>
+                                    <dd class="text-lg font-semibold text-white">Rr. ”Ismail Qemali” No.27, P.O.BOX. 8319 Tirana, Albania</dd>
+                                </div>
+                            </dl>
                         </div>
+
                     </div>
                 </div>
             </section>
@@ -598,7 +1102,7 @@
                 </div>
             </section>
 
-            <!-- Publication Section (New) -->
+            <!-- Publication Section -->
             <section id="publication" class="py-24 sm:py-32 fade-in-section">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="text-center">
@@ -623,9 +1127,37 @@
                 </div>
             </section>
 
-            <!-- Contact Section -->
+            <!-- --- NEW: University Life Marquee --- -->
+            <section id="university-life" class="py-24 sm:py-32 fade-in-section">
+                <div class="max-w-7xl mx-auto">
+                    <div class="text-center px-4">
+                        <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl section-title inline-block">The UAMD Community</h2>
+                        <p class="mt-4 text-lg leading-8 text-gray-300">A vibrant center for innovation and student life.</p>
+                    </div>
+                    
+                    <div class="mt-16 marquee-container">
+                        <div class="marquee-content">
+                            <!-- First set of images -->
+                            <img src="Image/image (1).jpg" alt="Graduation" class="marquee-item">
+                            <img src="Image/image (10).jpg" alt="Volleyball Team" class="marquee-item">
+                            <img src="Image/image (8).jpg" alt="Tech Lab" class="marquee-item">
+                            <img src="Image/image (5).jpg" alt="University Cake" class="marquee-item">
+                            <img src="Image/image (9).jpg" alt="Student Learning" class="marquee-item">
+                            
+                            <!-- Duplicate set for seamless loop -->
+                            <img src="Image/image (1).jpg" alt="Graduation" class="marquee-item">
+                            <img src="Image/image (10).jpg" alt="Volleyball Team" class="marquee-item">
+                            <img src="Image/image (8).jpg" alt="Tech Lab" class="marquee-item">
+                            <img src="Image/image (5).jpg" alt="University Cake" class="marquee-item">
+                            <img src="Image/image (9).jpg" alt="Student Learning" class="marquee-item">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact Section (REMOVED FORM) -->
             <section id="contact" class="py-24 sm:py-32 bg-gray-900 bg-opacity-30 fade-in-section">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
                     <!-- Contact Info -->
                     <div class="premium-card p-8 md:p-12">
                         <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl section-title inline-block">Contact Us</h2>
@@ -647,34 +1179,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- Contact Form (Placeholder) -->
-                    <div class="premium-card p-8 md:p-12">
-                         <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">Get in Touch</h2>
-                         <form action="#" method="POST" class="mt-8 space-y-6">
-                             <div>
-                                <label for="name" class="block text-sm font-medium text-gray-300">Full Name</label>
-                                <input type="text" id="name" name="name" required class="mt-2 block w-full rounded-lg border-gray-600 bg-gray-800 text-white p-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                             </div>
-                             <div>
-                                <label for="email" class="block text-sm font-medium text-gray-300">Email</label>
-                                <input type="email" id="email" name="email" required class="mt-2 block w-full rounded-lg border-gray-600 bg-gray-800 text-white p-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                             </div>
-                             <div>
-                                <label for="subject" class="block text-sm font-medium text-gray-300">Subject</label>
-                                <input type="text" id="subject" name="subject" required class="mt-2 block w-full rounded-lg border-gray-600 bg-gray-800 text-white p-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                             </div>
-                             <div>
-                                <label for="message" class="block text-sm font-medium text-gray-300">Message</label>
-                                <textarea id="message" name="message" rows="4" required class="mt-2 block w-full rounded-lg border-gray-600 bg-gray-800 text-white p-3 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"></textarea>
-                             </div>
-                             <div>
-                                <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-full shadow-lg text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all">
-                                    Send Message
-                                </button>
-                             </div>
-                         </form>
                     </div>
                 </div>
             </section>
@@ -802,7 +1306,7 @@
                     camera.position.z = 8; // Start a bit closer
 
                     animate3D();
-                    initScrollAnimation(); // <-- This is the NEW $100k part
+                    initScrollAnimation(); 
 
                 } catch (e) {
                     console.error("3D animation failed to initialize:", e);
@@ -838,7 +1342,6 @@
             function animate3D() {
                 requestAnimationFrame(animate3D);
                 
-                // Basic rotation and mouse follow
                 plexus.rotation.y += 0.0005;
                 plexus.rotation.x += 0.0002;
                 
@@ -856,28 +1359,26 @@
             }
             window.addEventListener('resize', onWindowResize, false);
             
-            // Initialize 3D scene
             init3D();
 
-            // --- NEW: GSAP Scroll-Triggered Animation ---
+            // --- GSAP Scroll-Triggered Animation ---
             function initScrollAnimation() {
                 gsap.registerPlugin(ScrollTrigger);
                 
-                // Animate the camera and plexus on scroll
                 const tl = gsap.timeline({
                     scrollTrigger: {
-                        trigger: "#home", // Animate based on the hero section
-                        start: "top top", // Start animation when top of hero hits top of viewport
-                        end: "bottom top", // End animation when bottom of hero hits top of viewport
-                        scrub: 1, // Smoothly "scrub" the animation on scroll (1s catch-up)
+                        trigger: "#home", 
+                        start: "top top", 
+                        end: "bottom top", 
+                        scrub: 1, 
                     }
                 });
 
-                // Define the animation
-                tl.to(camera.position, { z: 20, ease: "power1.inOut" }) // 1. Zoom camera out
-                  .to(plexus.rotation, { x: 1, y: 1.5, ease: "power1.inOut" }, "<") // 2. Rotate plexus
-                  .to(canvas, { opacity: 0.35, ease: "power1.inOut" }, "<") // 3. Fade it into the background
-                  .to("#scroll-prompt", { opacity: 0, ease: "power1.inOut" }, "<"); // 4. Hide scroll prompt
+                tl.to(camera.position, { z: 20, ease: "power1.inOut" }) 
+                  .to(plexus.rotation, { x: 1, y: 1.5, ease: "power1.inOut" }, "<") 
+                  .to(canvas, { opacity: 0.35, ease: "power1.inOut" }, "<")
+                  .to("#scroll-prompt", { opacity: 0, ease: "power1.inOut" }, "<")
+                  .to("#countdown-timer", { opacity: 0, scale: 0.8, ease: "power1.inOut" }, "<"); // Fade out countdown
             }
 
 
@@ -888,26 +1389,34 @@
             const menuIconOpen = document.getElementById('menu-icon-open');
             const menuIconClose = document.getElementById('menu-icon-close');
 
+            function closeMobileMenu() {
+                mobileMenu.classList.remove('open');
+                menuIconOpen.classList.remove('hidden');
+                menuIconClose.classList.add('hidden');
+                // Close all mobile sub-menus
+                document.querySelectorAll('.dropdown-toggle-mobile').forEach(btn => {
+                    btn.classList.remove('open');
+                });
+            }
+
             function smoothScroll(e) {
                 e.preventDefault();
                 const targetId = this.getAttribute('href');
                 
-                if (targetId === '#' || targetId === '#home') {
+                // Don't scroll for placeholder links
+                if (!targetId || targetId === '#') {
+                    return;
+                }
+
+                if (targetId === '#home') {
                     window.scrollTo({ top: 0, behavior: 'smooth' });
-                    
-                    // Close mobile menu if open
-                    if (mobileMenu.classList.contains('open')) {
-                        mobileMenu.classList.remove('open');
-                        menuIconOpen.classList.remove('hidden');
-                        menuIconClose.classList.add('hidden');
-                    }
+                    closeMobileMenu();
                     return;
                 }
 
                 const targetElement = document.querySelector(targetId);
                 
                 if (targetElement) {
-                    // Calculate offset for fixed header
                     const headerOffset = document.getElementById('header').offsetHeight;
                     const elementPosition = targetElement.getBoundingClientRect().top;
                     const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
@@ -917,13 +1426,7 @@
                         behavior: 'smooth'
                     });
                 }
-                
-                // Close mobile menu on link click
-                if (mobileMenu.classList.contains('open')) {
-                    mobileMenu.classList.remove('open');
-                    menuIconOpen.classList.remove('hidden');
-                    menuIconClose.classList.add('hidden');
-                }
+                closeMobileMenu();
             }
 
             navLinks.forEach(link => {
@@ -932,7 +1435,7 @@
             
 
             // --- Mobile Menu Toggle ---
-            if (mobileMenuBtn) { // Add null check for safety
+            if (mobileMenuBtn) {
                 mobileMenuBtn.addEventListener('click', () => {
                     const isOpen = mobileMenu.classList.toggle('open');
                     menuIconOpen.classList.toggle('hidden', isOpen);
@@ -940,11 +1443,27 @@
                 });
             }
 
+            // --- NEW: Mobile Dropdown Toggle ---
+            const mobileDropdownToggles = document.querySelectorAll('.dropdown-toggle-mobile');
+            mobileDropdownToggles.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    // Close other open dropdowns first
+                    mobileDropdownToggles.forEach(otherBtn => {
+                        if (otherBtn !== button) {
+                            otherBtn.classList.remove('open');
+                        }
+                    });
+                    // Toggle current one
+                    button.classList.toggle('open');
+                });
+            });
+
 
             // --- Back to Top Button ---
             const toTopBtn = document.getElementById('to-top-btn');
             
-            if(toTopBtn) { // Add null check for safety
+            if(toTopBtn) {
                 window.addEventListener('scroll', () => {
                     if (window.pageYOffset > 300) {
                         toTopBtn.classList.add('visible');
@@ -952,7 +1471,6 @@
                         toTopBtn.classList.remove('visible');
                     }
                 });
-
                 toTopBtn.addEventListener('click', () => {
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 });
@@ -965,119 +1483,144 @@
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('is-visible');
-                        // Optional: unobserve after it's visible
-                        // observer.unobserve(entry.target); 
                     }
                 });
             }, {
-                root: null, // relative to the viewport
-                threshold: 0.1 // 10% of the item must be visible
+                root: null, 
+                threshold: 0.1 
             });
 
             sections.forEach(section => {
                 observer.observe(section);
             });
 
-            // --- NEW: AI Track Suggester Logic ---
-            const suggestBtn = document.getElementById('suggest-track-btn');
-            const abstractInput = document.getElementById('abstract-input');
-            const aiLoader = document.getElementById('ai-loader');
-            const aiResultBox = document.getElementById('ai-result');
-            const aiResultText = document.getElementById('ai-result-text');
-            const aiError = document.getElementById('ai-error');
+            // --- NEW: Creative Countdown Timer Logic ---
+            const targetDate = new Date("May 28, 2026 09:00:00").getTime();
+            const countdownEls = {
+                days: document.getElementById('countdown-days'),
+                hours: document.getElementById('countdown-hours'),
+                mins: document.getElementById('countdown-mins'),
+                secs: document.getElementById('countdown-secs')
+            };
+            let lastValues = {};
+            let animationFrameId;
 
-            if (suggestBtn) { // Add null check, this is where the error happened
-                suggestBtn.addEventListener('click', async () => {
-                    const abstract = abstractInput.value;
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
 
-                    if (abstract.length < 50) {
-                        aiError.textContent = 'Please enter an abstract of at least 50 words.';
-                        aiError.style.display = 'block';
-                        aiResultBox.style.display = 'none';
-                        return;
+                if (distance < 0) {
+                    if (document.getElementById('countdown-timer')) {
+                        document.getElementById('countdown-timer').style.display = 'none';
                     }
+                    if (animationFrameId) cancelAnimationFrame(animationFrameId);
+                    return;
+                }
 
-                    // Reset UI
-                    aiError.style.display = 'none';
-                    aiResultBox.style.display = 'none';
-                    aiLoader.style.display = 'block';
-                    suggestBtn.disabled = true;
-
-                    try {
-                        const recommendation = await callGeminiApi(abstract);
-                        aiResultText.innerText = recommendation; // Using innerText to prevent HTML injection
-                        aiResultBox.style.display = 'block';
-                    } catch (error) {
-                        console.error('Gemini API call failed:', error);
-                        aiError.textContent = 'Error: Could not get suggestion. Please try again later.';
-                        aiError.style.display = 'block';
-                    } finally {
-                        // Re-enable UI
-                        aiLoader.style.display = 'none';
-                        suggestBtn.disabled = false;
-                    }
-                });
-            } // End of null check for suggestBtn
-
-            async function callGeminiApi(abstract) {
-                const apiKey = ""; // API key will be injected
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-
-                const systemPrompt = `You are an expert academic reviewer for the 'International Conference on Complex System Modelling and Artificial Intelligence (CSMAI 2026)'. The three conference tracks are:
-1. Complex System Modelling
-2. AI and Machine Learning
-3. Applications of AI & Complex Systems
-
-The user will provide a research abstract. Your job is to analyze the abstract and recommend *one* of the three main conference tracks that is the best fit.
-
-Your response must be formatted as follows:
-Recommended Track: [Exactly one of the 3 track names]
-Reason: [A brief, 1-2 sentence professional explanation for why it's a good fit]`;
-
-                const payload = {
-                    contents: [{
-                        parts: [{ text: abstract }]
-                    }],
-                    systemInstruction: {
-                        parts: [{ text: systemPrompt }]
-                    },
+                const values = {
+                    days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+                    hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+                    mins: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+                    secs: Math.floor((distance % (1000 * 60)) / 1000)
                 };
 
-                let response;
-                let retries = 3;
-                let delay = 1000;
+                // Glitch effect
+                Object.keys(values).forEach(key => {
+                    const el = countdownEls[key];
+                    const value = values[key];
+                    const lastValue = lastValues[key];
 
-                for (let i = 0; i < retries; i++) {
-                    try {
-                        response = await fetch(apiUrl, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(payload)
-                        });
+                    if (el && value !== lastValue) {
+                        // Only scramble if the value has *actually* changed
+                        scrambleText(el, String(value).padStart(2, '0'));
+                        lastValues[key] = value;
+                    } else if (el && !lastValue) {
+                        // Initial set
+                        el.textContent = String(value).padStart(2, '0');
+                        lastValues[key] = value;
+                    }
+                });
 
-                        if (response.ok) {
-                            const result = await response.json();
-                            const candidate = result.candidates?.[0];
-                            if (candidate && candidate.content?.parts?.[0]?.text) {
-                                return candidate.content.parts[0].text;
-                            } else {
-                                throw new Error('Invalid response structure from API.');
-                            }
-                        } else if (response.status === 429 || response.status >= 500) {
-                            // Throttling or server error, wait and retry
-                            await new Promise(resolve => setTimeout(resolve, delay));
-                            delay *= 2; // Exponential backoff
-                        } else {
-                            // Other client-side error, don't retry
-                            throw new Error(`API request failed with status: ${response.status}`);
+                animationFrameId = requestAnimationFrame(updateCountdown);
+            }
+
+            function scrambleText(element, newText) {
+                let frame = 0;
+                const framesPerScramble = 5; // How many frames the scramble lasts
+                const chars = '!<>-_\\/[]{}—=+*^?#________';
+                
+                function animateScramble() {
+                    if (frame < framesPerScramble) {
+                        let scramble = '';
+                        for (let i = 0; i < newText.length; i++) {
+                            scramble += chars[Math.floor(Math.random() * chars.length)];
                         }
-                    } catch (error) {
-                        console.warn(`API call attempt ${i + 1} failed. Retrying...`);
-                        if (i === retries - 1) throw error; // Re-throw last error
+                        element.textContent = scramble;
+                        frame++;
+                        requestAnimationFrame(animateScramble);
+                    } else {
+                        element.textContent = newText;
                     }
                 }
-                throw new Error('API request failed after all retries.');
+                animateScramble();
             }
+
+            updateCountdown(); // Start the countdown
+
+            // --- NEW: Committee Tab Logic ---
+            const tabs = document.querySelectorAll('.committee-tab');
+            const contents = document.querySelectorAll('.committee-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Deactivate all
+                    tabs.forEach(t => t.classList.remove('active'));
+                    contents.forEach(c => c.classList.remove('active'));
+
+                    // Activate clicked
+                    tab.classList.add('active');
+                    const targetContent = document.getElementById('tab-' + tab.dataset.tab);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                    }
+                });
+            });
+
+            // --- Text Scramble for Hero ---
+            // (Using a simplified version here, as the full class was removed in a previous edit)
+            function animateHeroText(id, text, delay) {
+                const el = document.getElementById(id);
+                if (!el) return;
+                
+                let frame = 0;
+                const totalFrames = 20; // Duration of scramble
+                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                let intervalId;
+
+                setTimeout(() => {
+                    intervalId = setInterval(() => {
+                        let scrambledText = '';
+                        for (let i = 0; i < text.length; i++) {
+                            if (frame >= totalFrames * (i / text.length)) {
+                                scrambledText += text[i];
+                            } else {
+                                scrambledText += chars[Math.floor(Math.random() * chars.length)];
+                            }
+                        }
+                        el.textContent = scrambledText;
+                        
+                        if (frame >= totalFrames) {
+                            clearInterval(intervalId);
+                            el.textContent = text;
+                        }
+                        frame++;
+                    }, 50); // Speed of animation
+                }, delay); // Start delay
+            }
+            
+            animateHeroText('hero-line-1', 'International Conference on', 500);
+            animateHeroText('hero-line-2', 'Complex System Modelling and Artificial Intelligence', 1000);
+
 
         });
     </script>
